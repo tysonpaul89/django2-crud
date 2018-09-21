@@ -1,0 +1,59 @@
+<form>
+    <div class="form-group row">
+        <label class="col-sm-2" for="name">Name</label>
+        <div class="col-sm-10">
+            <input type="text" name="name" id="student-name" class="form-control is-valid" placeholder="Enter Name">
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2" for="name">Age</label>
+        <div class="col-sm-10">
+            <input type="text" name="age" id="student-age" class="form-control is-invalid" placeholder="Enter Age">
+            <div class="invalid-feedback">
+                Opps!
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">Gender</div>
+        <div class="col-sm-10">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="gender-male" value="male">
+                <label class="form-check-label" for="gender-male">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="gender-female" value="female">
+                <label class="form-check-label" for="gender-female">Female</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2" for="email">Email</label>
+        <div class="col-sm-10">
+            <input type="email" id="email" class="form-control" placeholder="Enter email">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">School</div>
+        <div class="col-sm-10">
+            <select id="gpa" class="form-control">
+                <option value="none">none</option>
+                <option value="ES">Elementary School</option>
+                <option value="MS">Middle School</option>
+                <option value="HS">High School</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2">Is Active</div>
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="active">
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success col-sm-4 offset-sm-4">Submit</button>
+</form>

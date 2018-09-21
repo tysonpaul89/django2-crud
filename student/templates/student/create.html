@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Create Student{% endblock title %}
+
+{% block content %}
+<div class="col-md-6 offset-md-3 mt-3">
+    <div class="card">
+        <div class="card-title text-center mt-3">
+            <span class="h4">Create Student</span>
+        </div>
+        <div class="card-body">
+            {% include "student/student_form.html" %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
