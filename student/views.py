@@ -3,6 +3,7 @@ Student View Page
 """
 from django.shortcuts import render
 from .models import CustomUser
+from .forms import UserForm
 
 def list_student(request):
     """
@@ -22,8 +23,8 @@ def create_student(request):
     #     pass
     # else:
     #     pass
-
-    return render(request, 'student/create.html')
+    form = UserForm()
+    return render(request, 'student/create.html', { 'form': form})
 
 def edit_student(request, student_id):
     """

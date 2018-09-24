@@ -20,5 +20,11 @@ class UserForm(ModelForm):
     class Meta:
         model = CustomUser
         fields = ['name', 'age', 'gender', 'school', 'is_active']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Name'
+            })
+        }
     def clean_name(self):
         raise ValidationError('Test error')
