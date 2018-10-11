@@ -3,7 +3,7 @@ Student Form Models
 """
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from .models import CustomUser
+from .models import CustomUser, GENDER_TYPE, SCHOOL_TYPE
 from django.forms import ModelForm, ValidationError
 
 class CustomUserCreationForm(UserCreationForm):
@@ -19,12 +19,55 @@ class CustomUserChangeForm(UserChangeForm):
 class UserForm(ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['name', 'age', 'gender', 'school', 'is_active']
+        # Since we are using Django's User model, we only need to show the fields that are
+        # needed for our use
+        fields = ['name', 'age', 'email', 'gender', 'school', 'is_active']
+        # To customize form field attributes
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter Name'
-            })
+            }),
+            'age': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Age'
+            }),
+            'gender': forms.RadioSelect(
+                attrs={'class': 'form-check-input'},
+                choices=GENDER_TYPE
+            ),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Email'
+            }),
+            'school': forms.Select(
+                attrs={'class':'form-control'},
+                choices=SCHOOL_TYPE
+            ),
+            'is_active': forms.CheckboxInput(
+                attrs={'class':'form-check-input'},
+            ),
         }
-    def clean_name(self):
-        raise ValidationError('Test error')
+        # To show help text in form fields
+        help_texts = {
+            'name': 'Please enter your full name',
+            'is_active': 'Untick this checkbox to disable the student',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        # Overriding default choice value '-----' to a string
+        # Ref: https://stackoverflow.com/questions/12984013/how-to-change-empty-label-for-modelform-choice-field/14032358#14032358
+        self.fields["school"].choices = [("", "Please choose a school"),]\
+        + list(self.fields["school"].choices)[1:]
+
+    def clean(self):
+        super(UserForm, self).clean()
+        # To raise non field error
+        # raise ValidationError('Non Field Test error')
+
+        # To raise field error
+        # raise ValidationError({
+        #     'name': ValidationError('Name Field Test error')
+        # })
+        return self.cleaned_data

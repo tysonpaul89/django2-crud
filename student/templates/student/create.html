@@ -9,7 +9,7 @@
             <span class="h4">Create Student</span>
         </div>
         <div class="card-body">
-            {% include "student/student_form.html" %}
+            {% include "student/student_form.html" with form_errors=form.errors %}
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 """
 Student View Page
 """
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from .models import CustomUser
 from .forms import UserForm
 
@@ -19,19 +19,30 @@ def create_student(request):
     """
     To Create New Student
     """
-    # if request.method != 'POST':
-    #     pass
-    # else:
-    #     pass
-    form = UserForm()
-    return render(request, 'student/create.html', { 'form': form})
+    # Process form on POST request
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        # Validates the form
+        if form.is_valid():
+            # Saves the user data
+            #form.save()
+            # Redirecting user to listing page
+            return redirect('student:list_student')
+        else:
+            # Adding bootstrap error class to the invalid fields
+            for error_field in form.errors:
+                if error_field in form.fields:
+                    form.fields[error_field].widget.attrs['class'] += ' is-invalid'
+    else:
+        # Initializing form on GET request
+        form = UserForm()
+    return render(request, 'student/create.html', {'form': form})
 
 def edit_student(request, student_id):
     """
     To Update Student
     """
     print(student_id)
-    pass
 
 def view_student(request, student_id):
     """

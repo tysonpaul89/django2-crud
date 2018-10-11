@@ -21,11 +21,15 @@ class CustomUser(AbstractUser):
     """
     name = models.CharField(max_length=100, default='')
     age = models.PositiveIntegerField(default=0)
+    # We are going to show this gender field as a radio button. For this we set the
+    # value for the 'default' argument and 'blank=False' so that django doesn't
+    # include the blank choice '-----' in the from
+    # Ref: https://stackoverflow.com/questions/42390311/remove-blank-from-radioselect/42401631#42401631
     gender = models.CharField(
         max_length=1,
         choices=GENDER_TYPE,
-        null=True,
-        blank=True
+        default=GENDER_TYPE[0][0],
+        blank=False
     )
     school = models.CharField(
         max_length=2,
@@ -34,3 +38,6 @@ class CustomUser(AbstractUser):
         blank=True
     )
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.email

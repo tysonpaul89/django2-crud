@@ -1,59 +1,109 @@
-<form method="post" action=".">
+{% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {{form.non_field_errors}}
+    </div>
+{% endif %}
+
+<form method="post" action="{% url 'student:create_student' %}">
     {% csrf_token %}
     <div class="form-group row">
-        <label class="col-sm-2" for="name">Name</label>
+        <label class="col-sm-2" for="{{form.name.id_for_label}}">Name</label>
         <div class="col-sm-10">
-            <!-- <input type="text" name="name" id="student-name" class="form-control is-valid" placeholder="Enter Name"> -->
             {{form.name}}
-            <div class="valid-feedback">
-                Looks good!
-            </div>
+            {% if form.name.help_text %}
+                <small class="form-text text-muted">{{form.name.help_text|safe}}</small>
+            {% endif %}
+
+            {% if 'name' in form.errors %}
+                <div class="invalid-feedback">
+                {% for error in form.name.errors %}
+                    <p>{{error}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2" for="name">Age</label>
+        <label class="col-sm-2" for="{{form.age.id_for_label}}">Age</label>
         <div class="col-sm-10">
-            <input type="text" name="age" id="student-age" class="form-control is-invalid" placeholder="Enter Age">
-            <div class="invalid-feedback">
-                Opps!
-            </div>
+            {{form.age}}
+            {% if form.age.help_text %}
+                <small class="form-text text-muted">{{form.age.help_text|safe}}</small>
+            {% endif %}
+
+            {% if form.age.errors %}
+                <div class="invalid-feedback">
+                {% for error in form.age.errors %}
+                    <p>{{error}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2">Gender</div>
         <div class="col-sm-10">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="gender-male" value="male">
-                <label class="form-check-label" for="gender-male">Male</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" id="gender-female" value="female">
-                <label class="form-check-label" for="gender-female">Female</label>
-            </div>
+            {% for gender in form.gender %}
+                <div class="form-check form-check-inline">
+                    {{ gender.tag }}
+                    <label class="form-check-label" for="{{ gender.id_for_label }}">{{ gender.choice_label }}</label>
+                </div>
+            {% endfor %}
+            {% if form.gender.help_text %}
+                <small class="form-text text-muted">{{form.gender.help_text|safe}}</small>
+            {% endif %}
+
+            {% if form.gender.errors %}
+                <div class="invalid-feedback">
+                {% for error in form.gender.errors %}
+                    <p>{{error}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2" for="email">Email</label>
+        <label class="col-sm-2" for="{{form.email.id_for_label}}">Email</label>
         <div class="col-sm-10">
-            <input type="email" id="email" class="form-control" placeholder="Enter email">
+            {{form.email}}
+            {% if form.email.help_text %}
+                <small class="form-text text-muted">{{form.email.help_text|safe}}</small>
+            {% endif %}
+
+            {% if form.email.errors %}
+                <div class="invalid-feedback">
+                {% for error in form.email.errors %}
+                    <p>{{error}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2">School</div>
         <div class="col-sm-10">
-            <select id="gpa" class="form-control">
-                <option value="none">none</option>
-                <option value="ES">Elementary School</option>
-                <option value="MS">Middle School</option>
-                <option value="HS">High School</option>
-            </select>
+            {{form.school}}
+            {% if form.school.help_text %}
+                <small class="form-text text-muted">{{form.school.help_text|safe}}</small>
+            {% endif %}
+
+            {% if form.school.errors %}
+                <div class="invalid-feedback">
+                {% for error in form.school.errors %}
+                    <p>{{error}}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2">Is Active</div>
         <div class="col-sm-10">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="active">
+                {{ form.is_active }}
+                {% if form.is_active.help_text %}
+                    <small class="form-text text-muted">{{form.is_active.help_text|safe}}</small>
+                {% endif %}
             </div>
         </div>
     </div>
