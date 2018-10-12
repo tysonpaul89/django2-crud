@@ -41,8 +41,8 @@ class UserForm(ModelForm):
                 'placeholder': 'Enter Email'
             }),
             'school': forms.Select(
-                attrs={'class':'form-control'},
-                choices=SCHOOL_TYPE
+                attrs={'class':'form-control', 'required': True},
+                choices=SCHOOL_TYPE,
             ),
             'is_active': forms.CheckboxInput(
                 attrs={'class':'form-check-input'},
@@ -62,12 +62,17 @@ class UserForm(ModelForm):
         + list(self.fields["school"].choices)[1:]
 
     def clean(self):
-        super(UserForm, self).clean()
+        # Gets the cleaned data
+        cd = super(UserForm, self).clean()
+
         # To raise non field error
         # raise ValidationError('Non Field Test error')
 
-        # To raise field error
-        # raise ValidationError({
-        #     'name': ValidationError('Name Field Test error')
-        # })
+        # Age Validation
+        if cd['age'] < 5:
+            raise ValidationError({
+                'age': ValidationError(
+                    "Age is invalid, Student must be least 5 year old or greater"
+                )
+            })
         return self.cleaned_data

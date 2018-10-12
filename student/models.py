@@ -19,6 +19,10 @@ class CustomUser(AbstractUser):
     Custom User Model
     Adding extra fields age to the django's auth model
     """
+    # Overrides the django's user model email field and made it unique
+    # to replace USERNAME_FIELD as email.
+    # This is done bcoz we don't want to use username field in the site
+    email = models.EmailField(max_length=254, unique=True, db_index=True)
     name = models.CharField(max_length=100, default='')
     age = models.PositiveIntegerField(default=0)
     # We are going to show this gender field as a radio button. For this we set the
@@ -38,6 +42,13 @@ class CustomUser(AbstractUser):
         blank=True
     )
     is_active = models.BooleanField(default=True)
+
+    # Overriding username field and setting it as a none unique field bcoz
+    # we don't want to use usernam in the site instead we want to use email for that
+    username = models.CharField(max_length=40, unique=False, default='')
+    # Setting email field as replacement to username field
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name', 'age', 'gender', 'school', 'is_active']
 
     def __str__(self):
         return self.email
