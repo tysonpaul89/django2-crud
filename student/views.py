@@ -2,9 +2,11 @@
 Student View Page
 """
 from django.shortcuts import render, redirect, reverse
+from django.db import connection
+from django.contrib import messages
+
 from .models import CustomUser
 from .forms import UserForm, GENDER_TYPE, SCHOOL_TYPE
-from django.db import connection
 from util.db import to_dict
 
 def list_student(request):
@@ -28,6 +30,12 @@ def create_student(request):
         if form.is_valid():
             # Saves the user data
             form.save()
+            # Adding flash message
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Student data added successfully'
+            )
             # Redirecting user to listing page
             return redirect('student:list_student')
         else:
@@ -44,7 +52,32 @@ def edit_student(request, student_id):
     """
     To Update Student
     """
-    print(student_id)
+    try:
+        # Gets student model
+        student = CustomUser.objects.get(pk=student_id)
+        # Sets form data with student details
+        form = UserForm(request.POST or None, instance=student)
+    except CustomUser.DoesNotExist: # If( user not found
+        # Redirect user to listing page with flash message
+        messages.add_message(
+            request,
+            messages.ERROR,
+            'Student not found!'
+        )
+        # Redirecting user back to student listing
+        return redirect('student:list_student')
+    else:
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            # Setting success flash message
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Student data updated successfully'
+            )
+            # Redirecting user back to student listing
+            return redirect('student:list_student')
+        return render(request, 'student/update.html', {'form':form})
 
 def view_student(request, student_id):
     """
@@ -72,8 +105,7 @@ def view_student(request, student_id):
     result = cursor.fetchone()
     # Converting query results into dictionary containing column name as keys
     user_data = to_dict(cursor, result)
-    print(dict(SCHOOL_TYPE))
-    print(dict(GENDER_TYPE))
+    # Rending template
     return render(request, 'student/view.html', {
         'user_data': user_data,
         'gender_data': dict(GENDER_TYPE),
@@ -84,4 +116,21 @@ def delete_student(request, student_id):
     """
     To Delete Student
     """
-    pass
+    try:
+        # Deletes user data
+        CustomUser.objects.get(pk=student_id).delete()
+        # Sets flash mesage
+        messages.add_message(
+            request,
+            messages.INFO,
+            'Student data deleted successfully'
+        )
+    except CustomUser.DoesNotExist: # If user not found
+        # Sets flash mesage
+        messages.add_message(
+            request,
+            messages.ERROR,
+            'Student not found!'
+        )
+    finally: # Redirect user to student listing page
+        return redirect('student:list_student')

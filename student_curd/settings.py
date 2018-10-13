@@ -133,3 +133,9 @@ STATICFILES_DIRS = [
 
 # Sets authentication model
 AUTH_USER_MODEL = 'student.CustomUser'
+
+# Flash message tag customization
+from django.contrib import messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
