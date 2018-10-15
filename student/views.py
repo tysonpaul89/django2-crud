@@ -78,7 +78,7 @@ def edit_student(request, student_id):
             # Redirecting user back to student listing
             return redirect('student:list_student')
         else:
-             # Adding bootstrap error class to the invalid fields
+            # Adding bootstrap error class to the invalid fields
             for error_field in form.errors:
                 if error_field in form.fields:
                     form.fields[error_field].widget.attrs['class'] += ' is-invalid'
