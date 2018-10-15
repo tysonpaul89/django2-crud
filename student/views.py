@@ -1,7 +1,7 @@
 """
 Student View Page
 """
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
 
@@ -77,6 +77,13 @@ def edit_student(request, student_id):
             )
             # Redirecting user back to student listing
             return redirect('student:list_student')
+        else:
+             # Adding bootstrap error class to the invalid fields
+            for error_field in form.errors:
+                if error_field in form.fields:
+                    form.fields[error_field].widget.attrs['class'] += ' is-invalid'
+
+        # Renders the edit form
         return render(request, 'student/update.html', {'form':form})
 
 def view_student(request, student_id):
@@ -132,5 +139,5 @@ def delete_student(request, student_id):
             messages.ERROR,
             'Student not found!'
         )
-    finally: # Redirect user to student listing page
-        return redirect('student:list_student')
+    # Redirect user to student listing page
+    return redirect('student:list_student')
