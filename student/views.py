@@ -4,10 +4,10 @@ Student View Page
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
+from util.db import to_dict
 
 from .models import CustomUser
 from .forms import UserForm, GENDER_TYPE, SCHOOL_TYPE
-from util.db import to_dict
 
 def list_student(request):
     """
@@ -23,9 +23,11 @@ def create_student(request):
     """
     To Create New Student
     """
+    # Initialized form model, if form is submitted then
+    # the form data is automatically assigned from POST body
+    form = UserForm(request.POST or None)
     # Process form on POST request
     if request.method == 'POST':
-        form = UserForm(request.POST)
         # Validates the form
         if form.is_valid():
             # Saves the user data
@@ -43,9 +45,7 @@ def create_student(request):
             for error_field in form.errors:
                 if error_field in form.fields:
                     form.fields[error_field].widget.attrs['class'] += ' is-invalid'
-    else:
-        # Initializing form on GET request
-        form = UserForm()
+    # Renders the form
     return render(request, 'student/create.html', {'form': form})
 
 def edit_student(request, student_id):
